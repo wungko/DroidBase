@@ -63,7 +63,7 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
     }
 
     /**设置 加载下一页判断条件**/
-    private void setCanLoadNext(boolean b){
+    protected void setCanLoadNext(boolean b){
         this.canLoadNext = b;
     }
 
