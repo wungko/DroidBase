@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -421,5 +424,85 @@ public abstract class BaseActivity extends AppCompatActivity {
             call.cancel();
         }
     }
+
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (autoControlKeyBoard()) {
+            handleKeyBoardVisible(ev);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 键盘自动隐藏或者展示
+     * @return
+     */
+    protected boolean autoControlKeyBoard(){
+        return true;
+    }
+
+    /**
+     * 处理键盘隐藏和显示
+     * @param ev
+     */
+    private void handleKeyBoardVisible(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+
+            // 获得当前得到焦点的View，一般情况下就是EditText（特殊情况就是轨迹求或者实体案件会移动焦点）
+            View v = getCurrentFocus();
+
+            if (isShouldHideInput(v, ev)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                if (!getKeyBoardStatus()) onSoftKeyBoardHide();
+            } else {
+                if (getKeyBoardStatus()) onSoftKeyBoardShow();
+            }
+
+        }
+    }
+
+    /**
+     * 输入法收起
+     */
+    protected void onSoftKeyBoardHide(){
+
+    }
+
+    /**
+     * 输入法打开
+     */
+    protected void onSoftKeyBoardShow(){
+
+    }
+
+    /**
+     * 获取输入法状态
+     *
+     * @return
+     */
+    private boolean getKeyBoardStatus() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        return imm.isActive();
+    }
+
+
+    private boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] l = {0, 0};
+            v.getLocationInWindow(l);
+            int left = l[0], top = l[1], bottom = top + v.getHeight(), right = left
+                    + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击EditText的事件，忽略它。
+                return false;
+            } else {
+                return true;
+            }
+        }
+        // 如果焦点不是EditText则忽略，这个发生在视图刚绘制完，第一个焦点不在EditView上，和用户用轨迹球选择其他的焦点
+        return false;
+    }
+
 
 }
