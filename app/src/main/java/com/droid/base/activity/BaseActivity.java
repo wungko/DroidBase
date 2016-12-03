@@ -426,7 +426,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (autoControlKeyBoard()) {
+        if (autoHideKeyBoard()) {
             handleKeyBoardVisible(ev);
         }
         return super.dispatchTouchEvent(ev);
@@ -436,7 +436,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 键盘自动隐藏或者展示
      * @return
      */
-    protected boolean autoControlKeyBoard(){
+    protected boolean autoHideKeyBoard(){
         return true;
     }
 
