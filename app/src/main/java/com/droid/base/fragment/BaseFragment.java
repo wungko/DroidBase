@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.droid.base.BaseApplication;
-import com.droid.base.activity.BaseActivity;
-import com.droid.base.utils.ActivityStackHelper;
 import com.droid.base.utils.log.L;
 import com.google.gson.stream.MalformedJsonException;
 
@@ -295,9 +293,7 @@ public abstract class BaseFragment extends Fragment {
      */
     protected void t(String msg) {
         if (TextUtils.isEmpty(msg)) return;
-        ActivityStackHelper instance = ActivityStackHelper.getInstance();
-        BaseActivity droidBaseActivity = instance.currentActivity();
-        Toast.makeText(droidBaseActivity, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(BaseApplication.getInstance(), msg, Toast.LENGTH_SHORT).show();
     }
 
 

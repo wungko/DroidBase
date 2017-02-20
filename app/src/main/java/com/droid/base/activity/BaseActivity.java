@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.droid.base.BaseApplication;
-import com.droid.base.utils.ActivityStackHelper;
 import com.droid.base.utils.log.L;
 import com.google.gson.stream.MalformedJsonException;
 
@@ -63,7 +62,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /**设置屏幕方向**/
         setOrientation();
-        ActivityStackHelper.getInstance().add(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         setContentView(createLayout(inflater));
         butterKnife = ButterKnife.bind(this);
@@ -85,9 +83,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        removeAllCalls();
         butterKnife.unbind();
-        ActivityStackHelper.getInstance().removeActivity(this);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        removeAllCalls();
     }
 
     /**
