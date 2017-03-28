@@ -60,8 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        finish();
-        System.out.println("test");
         /**设置屏幕方向**/
         setOrientation();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -508,4 +506,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+    public static void main(String[] args) {
+        for(int i = 0 ; i < 100;i++){
+
+        }
+
+    }
 }
