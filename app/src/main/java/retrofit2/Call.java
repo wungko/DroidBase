@@ -70,5 +70,4 @@ public interface Call<T> extends Cloneable {
 
   /** The original HTTP request. */
   Request request();
-
 }

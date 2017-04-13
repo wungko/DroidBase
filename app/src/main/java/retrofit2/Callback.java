@@ -31,8 +31,9 @@ package retrofit2;
 public abstract class Callback<T> {
 
   public CallbackListener mCallbackListener;
-  public void setCallbackListener(CallbackListener callbackListener){
+  public void setCallbackListener(CallbackListener callbackListener) {
     mCallbackListener = callbackListener;
+
   }
 
   /**
@@ -47,5 +48,5 @@ public abstract class Callback<T> {
    * Invoked when a network exception occurred talking to the server or when an unexpected
    * exception occurred creating the request or processing the response.
    */
-  public abstract void onFailure(Call<T> call, Throwable t);
+    public abstract void onFailure(Call<T> call, Throwable t);
 }

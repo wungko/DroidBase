@@ -25,6 +25,5 @@ public class Page {
             return;
         }
         this.totalpage = page.totalpage;
-        nowpage +=1;
     }
 }

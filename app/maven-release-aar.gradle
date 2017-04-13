@@ -5,11 +5,9 @@ ext {
     PUBLISH_GROUP_ID = 'com.droid.base'
     PUBLISH_ARTIFACT_ID = 'structure'
     PUBLISH_VERSION = android.defaultConfig.versionName
-    targetSdkVersion = 24
-    compileSdkVersion = 24
-    buildToolsVersion = '24.0.0'
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
-    targetCompatibilityVersion = JavaVersion.VERSION_1_8
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
 }
 // 3.maven-路径
 uploadArchives {

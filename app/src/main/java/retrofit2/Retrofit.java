@@ -21,9 +21,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -57,14 +57,14 @@ import static retrofit2.Utils.checkNotNull;
  * @author Jake Wharton (jw@squareup.com)
  */
 public final class Retrofit {
-  private final Map<Method, ServiceMethod> serviceMethodCache = new LinkedHashMap<>();
+  private final Map<Method, ServiceMethod<?, ?>> serviceMethodCache = new ConcurrentHashMap<>();
 
-  private final okhttp3.Call.Factory callFactory;
-  private final HttpUrl baseUrl;
-  private final List<Converter.Factory> converterFactories;
-  private final List<CallAdapter.Factory> adapterFactories;
-  private final Executor callbackExecutor;
-  private final boolean validateEagerly;
+  final okhttp3.Call.Factory callFactory;
+  final HttpUrl baseUrl;
+  final List<Converter.Factory> converterFactories;
+  final List<CallAdapter.Factory> adapterFactories;
+  final Executor callbackExecutor;
+  final boolean validateEagerly;
 
   Retrofit(okhttp3.Call.Factory callFactory, HttpUrl baseUrl,
       List<Converter.Factory> converterFactories, List<CallAdapter.Factory> adapterFactories,
@@ -133,7 +133,7 @@ public final class Retrofit {
         new InvocationHandler() {
           private final Platform platform = Platform.get();
 
-          @Override public Object invoke(Object proxy, Method method, Object... args)
+          @Override public Object invoke(Object proxy, Method method, Object[] args)
               throws Throwable {
             // If the method is a method from Object then defer to normal invocation.
             if (method.getDeclaringClass() == Object.class) {
@@ -142,8 +142,9 @@ public final class Retrofit {
             if (platform.isDefaultMethod(method)) {
               return platform.invokeDefaultMethod(method, service, proxy, args);
             }
-            ServiceMethod serviceMethod = loadServiceMethod(method);
-            OkHttpCall okHttpCall = new OkHttpCall<>(serviceMethod, args);
+            ServiceMethod<Object, Object> serviceMethod =
+                (ServiceMethod<Object, Object>) loadServiceMethod(method);
+            OkHttpCall<Object> okHttpCall = new OkHttpCall<>(serviceMethod, args);
             return serviceMethod.callAdapter.adapt(okHttpCall);
           }
         });
@@ -158,12 +159,14 @@ public final class Retrofit {
     }
   }
 
-  ServiceMethod loadServiceMethod(Method method) {
-    ServiceMethod result;
+  ServiceMethod<?, ?> loadServiceMethod(Method method) {
+    ServiceMethod<?, ?> result = serviceMethodCache.get(method);
+    if (result != null) return result;
+
     synchronized (serviceMethodCache) {
       result = serviceMethodCache.get(method);
       if (result == null) {
-        result = new ServiceMethod.Builder(this, method).build();
+        result = new ServiceMethod.Builder<>(this, method).build();
         serviceMethodCache.put(method, result);
       }
     }
@@ -197,7 +200,7 @@ public final class Retrofit {
    *
    * @throws IllegalArgumentException if no call adapter available for {@code type}.
    */
-  public CallAdapter<?> callAdapter(Type returnType, Annotation[] annotations) {
+  public CallAdapter<?, ?> callAdapter(Type returnType, Annotation[] annotations) {
     return nextCallAdapter(null, returnType, annotations);
   }
 
@@ -207,14 +210,14 @@ public final class Retrofit {
    *
    * @throws IllegalArgumentException if no call adapter available for {@code type}.
    */
-  public CallAdapter<?> nextCallAdapter(CallAdapter.Factory skipPast, Type returnType,
+  public CallAdapter<?, ?> nextCallAdapter(CallAdapter.Factory skipPast, Type returnType,
       Annotation[] annotations) {
     checkNotNull(returnType, "returnType == null");
     checkNotNull(annotations, "annotations == null");
 
     int start = adapterFactories.indexOf(skipPast) + 1;
     for (int i = start, count = adapterFactories.size(); i < count; i++) {
-      CallAdapter<?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
+      CallAdapter<?, ?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
       if (adapter != null) {
         return adapter;
       }
@@ -376,6 +379,10 @@ public final class Retrofit {
     return callbackExecutor;
   }
 
+  public Builder newBuilder() {
+    return new Builder(this);
+  }
+
   /**
    * Build a new {@link Retrofit}.
    * <p>
@@ -383,11 +390,11 @@ public final class Retrofit {
    * are optional.
    */
   public static final class Builder {
-    private Platform platform;
+    private final Platform platform;
     private okhttp3.Call.Factory callFactory;
     private HttpUrl baseUrl;
-    private List<Converter.Factory> converterFactories = new ArrayList<>();
-    private List<CallAdapter.Factory> adapterFactories = new ArrayList<>();
+    private final List<Converter.Factory> converterFactories = new ArrayList<>();
+    private final List<CallAdapter.Factory> adapterFactories = new ArrayList<>();
     private Executor callbackExecutor;
     private boolean validateEagerly;
 
@@ -402,14 +409,22 @@ public final class Retrofit {
       this(Platform.get());
     }
 
+    Builder(Retrofit retrofit) {
+      platform = Platform.get();
+      callFactory = retrofit.callFactory;
+      baseUrl = retrofit.baseUrl;
+      converterFactories.addAll(retrofit.converterFactories);
+      adapterFactories.addAll(retrofit.adapterFactories);
+      // Remove the default, platform-aware call adapter added by build().
+      adapterFactories.remove(adapterFactories.size() - 1);
+      callbackExecutor = retrofit.callbackExecutor;
+      validateEagerly = retrofit.validateEagerly;
+    }
+
     /**
      * The HTTP client used for requests.
      * <p>
      * This is a convenience method for calling {@link #callFactory}.
-     * <p>
-     * Note: This method <b>does not</b> make a defensive copy of {@code client}. Changes to its
-     * settings will affect subsequent requests. Pass in a {@linkplain OkHttpClient#clone() cloned}
-     * instance to prevent this if desired.
      */
     public Builder client(OkHttpClient client) {
       return callFactory(checkNotNull(client, "client == null"));

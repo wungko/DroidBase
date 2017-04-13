@@ -16,7 +16,6 @@
 package retrofit2;
 
 import java.io.IOException;
-
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -26,7 +25,7 @@ import okio.ForwardingSource;
 import okio.Okio;
 
 final class OkHttpCall<T> implements Call<T> {
-  private final ServiceMethod<T> serviceMethod;
+  private final ServiceMethod<T, ?> serviceMethod;
   private final Object[] args;
 
   private volatile boolean canceled;
@@ -36,7 +35,7 @@ final class OkHttpCall<T> implements Call<T> {
   private Throwable creationFailure; // Either a RuntimeException or IOException.
   private boolean executed;
 
-  OkHttpCall(ServiceMethod<T> serviceMethod, Object[] args) {
+  OkHttpCall(ServiceMethod<T, ?> serviceMethod, Object[] args) {
     this.serviceMethod = serviceMethod;
     this.args = args;
   }
@@ -204,6 +203,7 @@ final class OkHttpCall<T> implements Call<T> {
     }
 
     if (code == 204 || code == 205) {
+      rawBody.close();
       return Response.success(null, rawResponse);
     }
 
@@ -232,7 +232,12 @@ final class OkHttpCall<T> implements Call<T> {
   }
 
   @Override public boolean isCanceled() {
-    return canceled;
+    if (canceled) {
+      return true;
+    }
+    synchronized (this) {
+      return rawCall != null && rawCall.isCanceled();
+    }
   }
 
   static final class NoContentResponseBody extends ResponseBody {
@@ -256,9 +261,6 @@ final class OkHttpCall<T> implements Call<T> {
       throw new IllegalStateException("Cannot read raw response body of a converted body.");
     }
   }
-
-//  ssh feng@192.168.1.251  password
-
 
   static final class ExceptionCatchingRequestBody extends ResponseBody {
     private final ResponseBody delegate;

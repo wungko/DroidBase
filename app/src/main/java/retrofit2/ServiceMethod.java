@@ -53,20 +53,21 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.QueryName;
 import retrofit2.http.Url;
 
 /** Adapts an invocation of an interface method into an HTTP call. */
-final class ServiceMethod<T> {
+final class ServiceMethod<R, T> {
   // Upper and lower characters, digits, underscores, and hyphens, starting with a character.
   static final String PARAM = "[a-zA-Z][a-zA-Z0-9_-]*";
   static final Pattern PARAM_URL_REGEX = Pattern.compile("\\{(" + PARAM + ")\\}");
   static final Pattern PARAM_NAME_REGEX = Pattern.compile(PARAM);
 
   final okhttp3.Call.Factory callFactory;
-  final CallAdapter<?> callAdapter;
+  final CallAdapter<R, T> callAdapter;
 
   private final HttpUrl baseUrl;
-  private final Converter<ResponseBody, T> responseConverter;
+  private final Converter<ResponseBody, R> responseConverter;
   private final String httpMethod;
   private final String relativeUrl;
   private final Headers headers;
@@ -76,7 +77,7 @@ final class ServiceMethod<T> {
   private final boolean isMultipart;
   private final ParameterHandler<?>[] parameterHandlers;
 
-  ServiceMethod(Builder<T> builder) {
+  ServiceMethod(Builder<R, T> builder) {
     this.callFactory = builder.retrofit.callFactory();
     this.callAdapter = builder.callAdapter;
     this.baseUrl = builder.retrofit.baseUrl();
@@ -113,7 +114,7 @@ final class ServiceMethod<T> {
   }
 
   /** Builds a method return value from an HTTP response body. */
-  T toResponse(ResponseBody body) throws IOException {
+  R toResponse(ResponseBody body) throws IOException {
     return responseConverter.convert(body);
   }
 
@@ -122,7 +123,7 @@ final class ServiceMethod<T> {
    * requires potentially-expensive reflection so it is best to build each service method only once
    * and reuse it. Builders cannot be reused.
    */
-  static final class Builder<T> {
+  static final class Builder<T, R> {
     final Retrofit retrofit;
     final Method method;
     final Annotation[] methodAnnotations;
@@ -146,9 +147,9 @@ final class ServiceMethod<T> {
     Set<String> relativeUrlParamNames;
     ParameterHandler<?>[] parameterHandlers;
     Converter<ResponseBody, T> responseConverter;
-    CallAdapter<?> callAdapter;
+    CallAdapter<T, R> callAdapter;
 
-    public Builder(Retrofit retrofit, Method method) {
+    Builder(Retrofit retrofit, Method method) {
       this.retrofit = retrofit;
       this.method = method;
       this.methodAnnotations = method.getAnnotations();
@@ -218,7 +219,7 @@ final class ServiceMethod<T> {
       return new ServiceMethod<>(this);
     }
 
-    private CallAdapter<?> createCallAdapter() {
+    private CallAdapter<T, R> createCallAdapter() {
       Type returnType = method.getGenericReturnType();
       if (Utils.hasUnresolvableType(returnType)) {
         throw methodError(
@@ -229,7 +230,8 @@ final class ServiceMethod<T> {
       }
       Annotation[] annotations = method.getAnnotations();
       try {
-        return retrofit.callAdapter(returnType, annotations);
+        //noinspection unchecked
+        return (CallAdapter<T, R>) retrofit.callAdapter(returnType, annotations);
       } catch (RuntimeException e) { // Wide exception range because factories are user code.
         throw methodError(e, "Unable to create call adapter for %s", returnType);
       }
@@ -426,6 +428,35 @@ final class ServiceMethod<T> {
           Converter<?, String> converter =
               retrofit.stringConverter(type, annotations);
           return new ParameterHandler.Query<>(name, converter, encoded);
+        }
+
+      } else if (annotation instanceof QueryName) {
+        QueryName query = (QueryName) annotation;
+        boolean encoded = query.encoded();
+
+        Class<?> rawParameterType = Utils.getRawType(type);
+        gotQuery = true;
+        if (Iterable.class.isAssignableFrom(rawParameterType)) {
+          if (!(type instanceof ParameterizedType)) {
+            throw parameterError(p, rawParameterType.getSimpleName()
+                + " must include generic type (e.g., "
+                + rawParameterType.getSimpleName()
+                + "<String>)");
+          }
+          ParameterizedType parameterizedType = (ParameterizedType) type;
+          Type iterableType = Utils.getParameterUpperBound(0, parameterizedType);
+          Converter<?, String> converter =
+              retrofit.stringConverter(iterableType, annotations);
+          return new ParameterHandler.QueryName<>(converter, encoded).iterable();
+        } else if (rawParameterType.isArray()) {
+          Class<?> arrayComponentType = boxIfPrimitive(rawParameterType.getComponentType());
+          Converter<?, String> converter =
+              retrofit.stringConverter(arrayComponentType, annotations);
+          return new ParameterHandler.QueryName<>(converter, encoded).array();
+        } else {
+          Converter<?, String> converter =
+              retrofit.stringConverter(type, annotations);
+          return new ParameterHandler.QueryName<>(converter, encoded);
         }
 
       } else if (annotation instanceof QueryMap) {

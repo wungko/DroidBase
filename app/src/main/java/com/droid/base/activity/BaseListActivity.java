@@ -106,7 +106,18 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         if (mPage == null) {
             return 1;
         }
-        return mPage.nowpage;
+        return mPage.nowpage +1;
+    }
+
+    /**
+     * 获取当前页数
+     * @return
+     */
+    protected int pageNext(){
+        if (mPage == null) {
+            return 1;
+        }
+        return mPage.nowpage +1;
     }
 
     /**
