@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class BaseListActivity extends BaseActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     /**翻页信息**/
-    Page mPage = new Page(1);
+    Page mPage = new Page();
     /**数据适配**/
     BaseAdapter mAdapter;
     /**ListView 初始化**/
@@ -106,7 +106,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         if (mPage == null) {
             return 1;
         }
-        return mPage.nowpage +1;
+        return mPage.nowpage+1;
     }
 
     /**

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class BaseListFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     /**翻页信息**/
-    Page mPage = new Page(1);
+    Page mPage = new Page();
     /**数据适配**/
     BaseAdapter adapter;
     /**ListView 初始化**/
@@ -106,7 +106,18 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
         if (mPage == null) {
             return 1;
         }
-        return mPage.nowpage;
+        return mPage.nowpage+1;
+    }
+
+    /**
+     * 获取当前页数
+     * @return
+     */
+    protected int pageNext(){
+        if (mPage == null) {
+            return 1;
+        }
+        return mPage.nowpage +1;
     }
 
     /**

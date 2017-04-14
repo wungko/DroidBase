@@ -5,14 +5,13 @@ package com.droid.base.entity;
  */
 
 public class Page {
-    public Page(int index){
-        nowpage = index;
+    public Page(){
     }
     public int nowpage;
     public int totalpage;
 
     public void reset(){
-        nowpage = 1;
+        nowpage = 0;
         totalpage = 0;
     }
 
@@ -25,5 +24,6 @@ public class Page {
             return;
         }
         this.totalpage = page.totalpage;
+        this.nowpage = page.nowpage;
     }
 }
