@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class BaseListFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     /**翻页信息**/
-    Page mPage = new Page();
+    Page mPage;
     /**数据适配**/
     BaseAdapter adapter;
     /**ListView 初始化**/
@@ -55,11 +55,28 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
     /**子类调用方法**/
     protected void addData(List data, Page page) {
         getAdapter().addData(data);
-        mPage.setPage(page);
+        setPage(page);
         if (getAdapter().getData().isEmpty()) {
             showEmpty();
         }
         canLoadNext = true;
+    }
+
+    private void setPage(Page page){
+        if (page == null) {
+            this.mPage = new Page() {
+                @Override
+                public boolean hasNextPage() {
+                    return false;
+                }
+
+                @Override
+                public int pageNext() {
+                    return 0;
+                }
+            };
+        }
+        this.mPage = page;
     }
 
     /**设置 加载下一页判断条件**/
@@ -98,34 +115,4 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
     }
 
-    /**
-     * 获取当前页数
-     * @return
-     */
-    protected int pageCurrent(){
-        if (mPage == null) {
-            return 1;
-        }
-        return mPage.page +1;
-    }
-
-    /**
-     * 获取当前页数
-     * @return
-     */
-    protected int pageNext(){
-        if (mPage == null) {
-            return 1;
-        }
-        return mPage.page +1;
-    }
-
-    /**
-     * 重置页数 默认为1
-     */
-    protected void pageReset(){
-        if (mPage != null) {
-            mPage.reset();
-        }
-    }
 }

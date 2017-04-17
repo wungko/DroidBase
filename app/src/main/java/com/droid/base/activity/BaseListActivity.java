@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class BaseListActivity extends BaseActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     /**翻页信息**/
-    Page mPage = new Page();
+    Page mPage;
     /**数据适配**/
     BaseAdapter mAdapter;
     /**ListView 初始化**/
@@ -60,6 +60,23 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         setCanLoadNext(true);
     }
 
+    private void setPage(Page page){
+        if (page == null) {
+            this.mPage = new Page() {
+                @Override
+                public boolean hasNextPage() {
+                    return false;
+                }
+
+                @Override
+                public int pageNext() {
+                    return 0;
+                }
+            };
+        }
+        this.mPage = page;
+    }
+
     /**设置 加载下一页判断条件**/
     protected void setCanLoadNext(boolean b){
         this.canLoadNext = b;
@@ -98,34 +115,4 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
 
     }
 
-    /**
-     * 获取当前页数
-     * @return
-     */
-    protected int pageCurrent(){
-        if (mPage == null) {
-            return 1;
-        }
-        return mPage.page +1;
-    }
-
-    /**
-     * 获取当前页数
-     * @return
-     */
-    protected int pageNext(){
-        if (mPage == null) {
-            return 1;
-        }
-        return mPage.page +1;
-    }
-
-    /**
-     * 重置页数 默认为1 总页数为0
-     */
-    protected void pageReset(){
-        if (mPage != null) {
-            mPage.reset();
-        }
-    }
 }
