@@ -10,6 +10,8 @@ public abstract class Page {
 
     public abstract int pageNext();
 
+    public abstract void reset();
+    
     public void setPage(Page page) {
         if (page == null) {
             return;
