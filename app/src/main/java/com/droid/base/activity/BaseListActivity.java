@@ -53,7 +53,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
     /**子类调用方法**/
     protected void addData(List data,Page page) {
         getAdapter().addData(data);
-        this.mPage.setPage(page);
+        setPage(page);
         if (getAdapter().getData().isEmpty()) {
             showEmpty();
         }
