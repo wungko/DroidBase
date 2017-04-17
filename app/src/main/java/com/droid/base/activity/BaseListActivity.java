@@ -106,7 +106,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         if (mPage == null) {
             return 1;
         }
-        return mPage.nowpage+1;
+        return mPage.page +1;
     }
 
     /**
@@ -117,7 +117,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         if (mPage == null) {
             return 1;
         }
-        return mPage.nowpage +1;
+        return mPage.page +1;
     }
 
     /**

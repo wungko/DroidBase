@@ -7,16 +7,21 @@ package com.droid.base.entity;
 public class Page {
     public Page(){
     }
-    public int nowpage;
+
+    public Page(Boolean hasMore){
+        this.hasMore = hasMore;
+    }
+    public int page;
     public int totalpage;
+    public boolean hasMore;
 
     public void reset(){
-        nowpage = 0;
+        page = 0;
         totalpage = 0;
     }
 
     public boolean hasNextPage(){
-        return totalpage > 0 && nowpage < totalpage;
+        return (totalpage > 0 && page < totalpage) || hasMore;
     }
 
     public void setPage(Page page) {
@@ -24,6 +29,6 @@ public class Page {
             return;
         }
         this.totalpage = page.totalpage;
-        this.nowpage = page.nowpage;
+        this.page = page.page;
     }
 }
