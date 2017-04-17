@@ -74,6 +74,11 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
                 public int pageNext() {
                     return 0;
                 }
+
+                @Override
+                public void reset() {
+
+                }
             };
         }
         this.mPage = page;
