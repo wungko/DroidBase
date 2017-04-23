@@ -16,7 +16,22 @@ import java.util.List;
  */
 public abstract class BaseListFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     /**翻页信息**/
-    Page mPage;
+    Page mPage = new Page() {
+        @Override
+        public boolean hasNextPage() {
+            return false;
+        }
+
+        @Override
+        public int pageNext() {
+            return 0;
+        }
+
+        @Override
+        public void reset() {
+
+        }
+    };
     /**数据适配**/
     BaseAdapter adapter;
     /**ListView 初始化**/
