@@ -97,6 +97,10 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         setCanLoadNext(true);
     }
 
+    protected Page getPage(){
+        return this.mPage;
+    }
+
     private void setPage(Page page){
         if (page == null) {
             this.mPage = new Page() {
