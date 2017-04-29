@@ -73,7 +73,7 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
     protected abstract int getLayout();
 
     protected abstract void bindData(K k, T item);
-    protected abstract void bindData(K k, T item, int position);
+    protected void bindData(K k, T item, int position){}
 
     protected abstract K initHolder(View convertView);
 
