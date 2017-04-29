@@ -66,12 +66,14 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
         }
 
         bindData(k, getItem(position));
+        bindData(k,getItem(position),position);
         return convertView;
     }
 
     protected abstract int getLayout();
 
     protected abstract void bindData(K k, T item);
+    protected abstract void bindData(K k, T item, int position);
 
     protected abstract K initHolder(View convertView);
 
