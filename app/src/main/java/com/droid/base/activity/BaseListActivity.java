@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.droid.base.adapter.BaseAdapter;
@@ -36,15 +37,28 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
     BaseAdapter mAdapter;
     /**ListView 初始化**/
     void initListView() {
-        ListView listView = getListView();
-        if (listView == null) {
-            throw new RuntimeException("BaseListActivity please specific listView");
-        }
-        listView.setOnScrollListener(this);
+
         mAdapter = initAdapter();
         if (mAdapter == null) {
             throw new RuntimeException("BaseListActivity please specific listView adapter");
         }
+
+        GridView gridView = getGridView();
+        if (gridView != null) {
+            gridView.setOnScrollListener(this);
+
+            gridView.setAdapter(mAdapter);
+
+            gridView.setOnItemClickListener(this);
+            return;
+        }
+        ListView listView = getListView();
+
+        if (listView == null) {
+            throw new RuntimeException("BaseListActivity please specific listView");
+        }
+        listView.setOnScrollListener(this);
+
         listView.setAdapter(mAdapter);
 
         listView.setOnItemClickListener(this);
@@ -54,6 +68,14 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initListView();
+    }
+
+    /**
+     * 页面是gridView
+     * @return
+     */
+    protected GridView getGridView(){
+        return null;
     }
 
     /**子类 需要实现此方法 返回listView**/
@@ -73,6 +95,10 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
             showEmpty();
         }
         setCanLoadNext(true);
+    }
+
+    protected Page getPage(){
+        return this.mPage;
     }
 
     private void setPage(Page page){

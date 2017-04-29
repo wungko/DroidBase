@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.droid.base.adapter.BaseAdapter;
@@ -33,19 +34,35 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
         }
     };
     /**数据适配**/
-    BaseAdapter adapter;
+    BaseAdapter mAdapter;
     /**ListView 初始化**/
     void initListView(){
+
+        mAdapter = initAdapter();
+        if (mAdapter == null) {
+            throw new RuntimeException("BaseListActivity please specific listView adapter");
+        }
+
+        GridView gridView = getGridView();
+        if (gridView != null) {
+            gridView.setOnScrollListener(this);
+
+            gridView.setAdapter(mAdapter);
+
+            gridView.setOnItemClickListener(this);
+            return;
+        }
+
         ListView listView = getListView();
         if (listView == null) {
             throw new RuntimeException("BaseListFragment please specific listView");
         }
         listView.setOnScrollListener(this);
-        adapter = initAdapter();
-        if (adapter == null) {
+        mAdapter = initAdapter();
+        if (mAdapter == null) {
             throw new RuntimeException("BaseListFragment please specific listView adapter");
         }
-        listView.setAdapter(adapter);
+        listView.setAdapter(mAdapter);
 
         listView.setOnItemClickListener(this);
     }
@@ -53,6 +70,14 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initListView();
+    }
+
+    /**
+     * 页面是gridView
+     * @return
+     */
+    protected GridView getGridView(){
+        return null;
     }
 
     /**子类 需要实现此方法 返回listView**/
@@ -99,6 +124,10 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
         this.mPage = page;
     }
 
+    protected Page getPage(){
+        return this.mPage;
+    }
+
     /**设置 加载下一页判断条件**/
     protected void setCanLoadNext(boolean b){
         this.canLoadNext = b;
@@ -110,7 +139,7 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
     }
 
     protected BaseAdapter getAdapter() {
-        return adapter;
+        return mAdapter;
     }
 
     int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
