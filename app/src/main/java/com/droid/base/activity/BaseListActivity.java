@@ -25,7 +25,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
 
         @Override
         public int pageNext() {
-            return 0;
+            return 1;
         }
 
         @Override
@@ -111,7 +111,7 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
 
                 @Override
                 public int pageNext() {
-                    return 0;
+                    return 1;
                 }
 
                 @Override

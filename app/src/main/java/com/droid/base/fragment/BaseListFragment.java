@@ -25,7 +25,7 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
         @Override
         public int pageNext() {
-            return 0;
+            return 1;
         }
 
         @Override
@@ -112,7 +112,7 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
                 @Override
                 public int pageNext() {
-                    return 0;
+                    return 1;
                 }
 
                 @Override
