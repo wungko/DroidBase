@@ -25,12 +25,17 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
         @Override
         public int pageNext() {
-            return 0;
+            return 1;
         }
 
         @Override
         public void reset() {
 
+        }
+
+        @Override
+        public int currentPage() {
+            return 1;
         }
     };
     /**数据适配**/
@@ -94,6 +99,9 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
     /**子类调用方法**/
     protected void addData(List data, Page page) {
+        if (page.currentPage() == 1) {
+            getAdapter().reset();
+        }
         getAdapter().addData(data);
         setPage(page);
         if (getAdapter().getData().isEmpty()) {
@@ -112,12 +120,17 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
 
                 @Override
                 public int pageNext() {
-                    return 0;
+                    return 1;
                 }
 
                 @Override
                 public void reset() {
 
+                }
+
+                @Override
+                public int currentPage() {
+                    return 1;
                 }
             };
         }

@@ -18,5 +18,6 @@ public abstract class Page {
         }
     }
 
+    public abstract int currentPage();
 
 }
