@@ -126,6 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mIs1RequestData = true;
+                onEmptyClick();
                 requestData();
             }
         });
@@ -510,6 +511,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         for(int i = 0 ; i < 100;i++){
 
         }
+    }
+
+    protected void onEmptyClick(){
 
     }
 }
