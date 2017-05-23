@@ -120,7 +120,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         contentContainer.addView(content, VIEW_CONTENT_INDEX, layoutParams);
 
         // 空布局
-        View empty = inflater.inflate(BaseApplication.getInstance().getEmptyLayout(), null, false);
+        int emptyLayout = getEmptyLayout();
+        if (emptyLayout == 0) {
+            emptyLayout = BaseApplication.getInstance().getEmptyLayout();
+        }
+        View empty = inflater.inflate(emptyLayout, null, false);
         contentContainer.addView(empty, VIEW_EMPTY_INDEX, layoutParams);
         empty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +165,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         return root;
+    }
+
+    /**
+     * 空布局 可重写此方法
+     */
+    protected int getEmptyLayout() {
+        return 0;
     }
 
     protected abstract int getToolbarLayout();
