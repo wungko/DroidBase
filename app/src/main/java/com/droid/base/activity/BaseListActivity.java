@@ -32,6 +32,11 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
         public void reset() {
 
         }
+
+        @Override
+        public int currentPage() {
+            return 1;
+        }
     };
     /**数据适配**/
     BaseAdapter mAdapter;
@@ -89,6 +94,9 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
 
     /**子类调用方法**/
     protected void addData(List data,Page page) {
+        if (page.currentPage() == 1) {
+            getAdapter().reset();
+        }
         getAdapter().addData(data);
         setPage(page);
         if (getAdapter().getData().isEmpty()) {
@@ -117,6 +125,11 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
                 @Override
                 public void reset() {
 
+                }
+
+                @Override
+                public int currentPage() {
+                    return 1;
                 }
             };
         }

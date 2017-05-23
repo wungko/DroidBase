@@ -41,7 +41,7 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
 
     public void reset(){
         mData.clear();
-        notifyDataSetInvalidated();
+        notifyDataSetChanged();
     }
 
     @Override
