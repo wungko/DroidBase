@@ -167,7 +167,13 @@ public abstract class BaseFragment extends Fragment {
         contentContainer.addView(content, VIEW_CONTENT_INDEX, layoutParams);
 
         // 空布局
-        View empty = inflater.inflate(BaseApplication.getInstance().getEmptyLayout(), null, false);
+
+        // 空布局
+        int emptyLayout = getEmptyLayout();
+        if (emptyLayout == 0) {
+            emptyLayout = BaseApplication.getInstance().getEmptyLayout();
+        }
+        View empty = inflater.inflate(emptyLayout, null, false);
         contentContainer.addView(empty, VIEW_EMPTY_INDEX, layoutParams);
         empty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,6 +255,13 @@ public abstract class BaseFragment extends Fragment {
         changeShowAnimation(VIEW_HERROR_INDEX, VISIBLE);
     }
 
+
+    /**
+     * 空布局 可重写此方法
+     */
+    protected int getEmptyLayout() {
+        return 0;
+    }
 
     /**
      * 动画切换

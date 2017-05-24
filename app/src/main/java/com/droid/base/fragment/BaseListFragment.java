@@ -110,7 +110,7 @@ public abstract class BaseListFragment extends BaseFragment implements AbsListVi
         canLoadNext = true;
     }
 
-    private void setPage(Page page){
+    protected void setPage(Page page){
         if (page == null) {
             this.mPage = new Page() {
                 @Override
