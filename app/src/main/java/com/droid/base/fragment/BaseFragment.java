@@ -67,6 +67,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = createLayout(inflater);
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         butterKnife = ButterKnife.bind(this, view);
         return view;
     }
