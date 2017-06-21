@@ -294,8 +294,10 @@ public abstract class BaseFragment extends Fragment {
                 animId = android.R.anim.fade_out;
                 break;
         }
-
-        Animation anim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), animId);
+        if (getActivity() == null) {
+            return;
+        }
+        Animation anim = AnimationUtils.loadAnimation(BaseApplication.getInstance(), animId);
         anim.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
         view.startAnimation(anim);
     }

@@ -174,4 +174,8 @@ public abstract class BaseListActivity extends BaseActivity implements AbsListVi
 
     }
 
+    @Override
+    protected void onEmptyClick() {
+        getPage().reset();
+    }
 }
