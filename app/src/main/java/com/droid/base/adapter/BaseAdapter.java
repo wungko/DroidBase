@@ -35,6 +35,19 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void addData(int position, List<T> data) {
+        if (data == null) {
+            return;
+        }
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void addData(int position, T t) {
+        mData.add(position, t);
+        notifyDataSetChanged();
+    }
+
     public List<T> getData(){
         return mData;
     }
