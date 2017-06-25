@@ -431,7 +431,7 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    private void removeAllCalls() {
+    protected void removeAllCalls() {
         for (Call call : mCalls) {
             call.cancel();
         }

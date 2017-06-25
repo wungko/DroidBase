@@ -433,7 +433,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.mIs1RequestData = bool;
     }
 
-    private void removeAllCalls() {
+    protected void removeAllCalls() {
         for (Call call : mCalls) {
             call.cancel();
         }
