@@ -27,6 +27,6 @@ ext{
     compileSdkVersion = 26
     buildToolsVersion = "26.0.2"
 
-    appVersionCode = 3030
-    appVersionName = "3.3"
+    appVersionCode = 1000
+    appVersionName = "1.0.0"
 }
