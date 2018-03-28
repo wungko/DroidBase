@@ -25,8 +25,6 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Stack;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.CallbackListener;
@@ -48,10 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      **/
     private final int VIEW_LOADING_INDEX = 0, VIEW_CONTENT_INDEX = 1, VIEW_EMPTY_INDEX = 2, VIEW_BERROR_INDEX = 3, VIEW_HERROR_INDEX = 4;
     /**
-     * view 注解
-     **/
-    Unbinder butterKnife;
-    /**
      * 请求队列
      **/
     private Stack<Call> mCalls = new Stack<>();
@@ -64,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setOrientation();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         setContentView(createLayout(inflater));
-        butterKnife = ButterKnife.bind(this);
+//        ButterKnife.bind(this);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             extras = new Bundle();
@@ -78,12 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      **/
     protected void setOrientation() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        butterKnife.unbind();
     }
 
     @Override

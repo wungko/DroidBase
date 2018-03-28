@@ -8,6 +8,13 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.appVersionCode
         versionName rootProject.ext.appVersionName
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
+
     }
     buildTypes {
         release {
@@ -26,8 +33,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     /**视图注解**/
-    compile 'com.jakewharton:butterknife:8.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
+
     /**material dialog**/
     compile 'com.afollestad.material-dialogs:core:0.8.6.1'
     /**okhttp**/

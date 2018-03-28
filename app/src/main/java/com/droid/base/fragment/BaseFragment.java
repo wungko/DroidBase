@@ -21,8 +21,6 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Stack;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.CallbackListener;
@@ -54,7 +52,6 @@ public abstract class BaseFragment extends Fragment {
     /**
      * view 注解
      **/
-    Unbinder butterKnife;
     boolean mIs1RequestData = true; //首次加载数据
     /**
      * 请求队列
@@ -68,7 +65,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = createLayout(inflater);
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        butterKnife = ButterKnife.bind(this, view);
+//        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -83,7 +80,6 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         removeAllCalls();
-        butterKnife.unbind();
     }
 
     protected abstract int getToolbarLayout();

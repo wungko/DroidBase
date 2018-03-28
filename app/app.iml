@@ -111,19 +111,17 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.android.support:support-annotations:24.0.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:animated-vector-drawable-24.0.0" level="project" />
-    <orderEntry type="library" name="com.android.support:recyclerview-v7-24.0.0" level="project" />
-    <orderEntry type="library" name="com.afollestad.material-dialogs:core-0.8.6.1" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.1@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-24.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.8.1@jar" level="project" />
     <orderEntry type="library" name="org.codehaus.mojo:animal-sniffer-annotations:1.15@jar" level="project" />
-    <orderEntry type="library" name="com.jakewharton:butterknife-annotations:8.1.0@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-annotations:24.0.0@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:animated-vector-drawable-24.0.0" level="project" />
+    <orderEntry type="library" name="com.android.support:recyclerview-v7-24.0.0" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.13.0@jar" level="project" />
-    <orderEntry type="library" name="com.jakewharton:butterknife-8.1.0" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-24.0.0" level="project" />
     <orderEntry type="library" name="me.zhanghai.android.materialprogressbar:library-1.1.6" level="project" />
+    <orderEntry type="library" name="com.afollestad.material-dialogs:core-0.8.6.1" level="project" />
   </component>
 </module>
