@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.appVersionCode
+        versionName rootProject.ext.appVersionName
     }
     buildTypes {
         release {
@@ -26,14 +26,14 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     /**视图注解**/
-    compile 'com.jakewharton:butterknife:8.0.1'
-    compile 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
     /**material dialog**/
     compile 'com.afollestad.material-dialogs:core:0.8.6.1'
     /**okhttp**/
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'org.codehaus.mojo:animal-sniffer-annotations:1.15'
     /**Gson 解析**/
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.8.1'
 }
 apply from: 'maven-release-aar.gradle'//打包
