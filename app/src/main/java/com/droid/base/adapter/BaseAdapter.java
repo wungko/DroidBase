@@ -15,7 +15,8 @@ import java.util.List;
 public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
     private List<T> mData = new ArrayList<>();
 
-    public BaseAdapter() {}
+    public BaseAdapter() {
+    }
 
     @Override
     public int getCount() {
@@ -35,11 +36,15 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public List<T> getList() {
+        return mData;
+    }
+
     public void addData(int position, List<T> data) {
         if (data == null) {
             return;
         }
-        mData.addAll(data);
+        mData.addAll(position, data);
         notifyDataSetChanged();
     }
 
@@ -48,11 +53,11 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public List<T> getData(){
+    public List<T> getData() {
         return mData;
     }
 
-    public void reset(){
+    public void reset() {
         mData.clear();
         notifyDataSetChanged();
     }
@@ -64,30 +69,52 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        K k;
+        K k = null;
         if (convertView == null) {
-            int layout = getLayout();
-            if (layout == 0) {
-                throw new RuntimeException("请指定布局ID");
+            int viewTypeCount = getViewTypeCount();
+            //item 单type
+            if (viewTypeCount > 1) {
+                int itemViewType = getItemViewType(position);
+                int layout = getLayout(itemViewType);
+                if (layout == 0) {
+                    throw new RuntimeException("请指定布局ID");
+                }
+                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, parent, false);
+                k = initHolder(convertView, itemViewType);
+                //item 多type
+            } else {
+                int layout = getLayout();
+                if (layout == 0) {
+                    throw new RuntimeException("请指定布局ID");
+                }
+                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, parent, false);
+                k = initHolder(convertView);
             }
-
-            convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, parent, false);
-            k = initHolder(convertView);
             convertView.setTag(k);
         } else {
             k = (K) convertView.getTag();
         }
 
-        bindData(k, getItem(position));
-        bindData(k,getItem(position),position);
+        bindData(k, getItem(position), position);
         return convertView;
     }
 
     protected abstract int getLayout();
 
+    protected int getLayout(int position) {
+        return 0;
+    }
+
     protected abstract void bindData(K k, T item);
-    protected void bindData(K k, T item, int position){}
+
+    protected void bindData(K k, T item, int position) {
+    }
 
     protected abstract K initHolder(View convertView);
+
+    protected K initHolder(View convertView, int itemViewType) {
+        return null;
+    }
+
 
 }
