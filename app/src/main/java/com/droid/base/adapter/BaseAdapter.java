@@ -101,7 +101,7 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
 
     protected abstract int getLayout();
 
-    protected int getLayout(int position) {
+    protected int getLayout(int viewType) {
         return 0;
     }
 
