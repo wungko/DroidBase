@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by wungko on 16/8/1.
  */
-public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
+public abstract class BaseAdapter<T, K extends ViewHolder> extends android.widget.BaseAdapter {
     private List<T> mData = new ArrayList<>();
 
     public BaseAdapter() {
@@ -94,8 +94,7 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
         } else {
             k = (K) convertView.getTag();
         }
-
-        bindData(k, getItem(position), position);
+        k.bindData(getItem(position),position);
         return convertView;
     }
 
@@ -103,11 +102,6 @@ public abstract class BaseAdapter<T, K> extends android.widget.BaseAdapter {
 
     protected int getLayout(int viewType) {
         return 0;
-    }
-
-    protected abstract void bindData(K k, T item);
-
-    protected void bindData(K k, T item, int position) {
     }
 
     protected abstract K initHolder(View convertView);

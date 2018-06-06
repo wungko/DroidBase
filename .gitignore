@@ -1,3 +1,5 @@
 .gradle
 .idea
 build
+droidbase.iml
+app.iml
