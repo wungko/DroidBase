@@ -2,6 +2,7 @@ package com.droid.base.activity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -87,10 +88,18 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     private LinearLayout createLayout(LayoutInflater inflater) {
         LinearLayout root = new LinearLayout(this);
+        root.setFitsSystemWindows(true);
         root.setOrientation(LinearLayout.VERTICAL);
+        if (!TextUtils.isEmpty(getBackgroundColor())) {
+            root.setBackgroundColor(Color.parseColor(getBackgroundColor()));
+        }
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         contentContainer = new LinearLayout(this);
+        if (!TextUtils.isEmpty(getContainerBackgroundColor())) {
+            contentContainer.setBackgroundColor(Color.parseColor(getContainerBackgroundColor()));
+        }
+
         if (getToolbarLayout() != 0) {
             inflater.inflate(getToolbarLayout(), root, true);
             root.addView(contentContainer, layoutParams);
@@ -153,6 +162,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         return root;
+    }
+
+    protected String getContainerBackgroundColor() {
+        return null;
+    }
+
+    protected String getBackgroundColor() {
+        return null;
     }
 
     /**
