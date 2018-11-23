@@ -79,7 +79,7 @@ public abstract class BaseAdapter<T, K extends ViewHolder> extends android.widge
                 if (layout == 0) {
                     throw new RuntimeException("请指定布局ID");
                 }
-                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, parent, false);
+                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, null);
                 k = initHolder(convertView, itemViewType);
                 //item 多type
             } else {
@@ -87,7 +87,7 @@ public abstract class BaseAdapter<T, K extends ViewHolder> extends android.widge
                 if (layout == 0) {
                     throw new RuntimeException("请指定布局ID");
                 }
-                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, parent, false);
+                convertView = LayoutInflater.from(BaseApplication.getInstance()).inflate(layout, null);
                 k = initHolder(convertView);
             }
             convertView.setTag(k);

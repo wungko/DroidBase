@@ -29,5 +29,5 @@ ext{
     buildToolsVersion = "26.0.2"
 
     appVersionCode = 2003
-    appVersionName = "2.1.0"
+    appVersionName = "2.1.1"
 }

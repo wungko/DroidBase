@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 
 import com.droid.base.utils.Config;
 import com.droid.base.utils.log.L;
@@ -34,7 +35,7 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Thread.setDefaultUncaughtExceptionHandler(this.getExceptionHandler());
-        mainHandler = new Handler();
+        mainHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
