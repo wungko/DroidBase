@@ -68,10 +68,11 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = createLayout(inflater);
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        butterKnife = ButterKnife.bind(this, view);
+        if (isNeedButterKnife()) {
+            butterKnife = ButterKnife.bind(this, view);
+        }
         return view;
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -83,7 +84,9 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         removeAllCalls();
-        butterKnife.unbind();
+        if (butterKnife != null) {
+            butterKnife.unbind();
+        }
     }
 
     protected abstract int getToolbarLayout();
@@ -155,7 +158,7 @@ public abstract class BaseFragment extends Fragment {
             inflater.inflate(getToolbarLayout(), root, true);
             root.addView(contentContainer, layoutParams);
         } else {
-            L.i("",BaseFragment.this.getClass().getSimpleName() + " has no toolbar layout");
+            L.i("", BaseFragment.this.getClass().getSimpleName() + " has no toolbar layout");
         }
 
         // 进度条
@@ -270,7 +273,7 @@ public abstract class BaseFragment extends Fragment {
      * @param visible
      */
     private void changeShowAnimation(int childrenIndex, int visible) {
-        if(contentContainer == null){
+        if (contentContainer == null) {
             L.e("页面布局 还未初始化完成");
             return;
         }
@@ -388,7 +391,7 @@ public abstract class BaseFragment extends Fragment {
                     } else {
                         t(getServerError());
                     }
-                } else if(t instanceof UnknownHostException) {
+                } else if (t instanceof UnknownHostException) {
                     if (mIs1RequestData) {
                         showHttpError();
                     } else {
@@ -447,5 +450,9 @@ public abstract class BaseFragment extends Fragment {
 
     protected void setIs1Request(boolean bool) {
         this.mIs1RequestData = bool;
+    }
+
+    protected boolean isNeedButterKnife() {
+        return true;
     }
 }

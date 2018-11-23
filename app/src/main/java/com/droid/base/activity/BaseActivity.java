@@ -64,7 +64,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         setOrientation();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         setContentView(createLayout(inflater));
-        butterKnife = ButterKnife.bind(this);
+        if (isNeedButterKnife()) {
+            butterKnife = ButterKnife.bind(this);
+        }
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             extras = new Bundle();
@@ -83,7 +85,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        butterKnife.unbind();
+        if (butterKnife != null) {
+            butterKnife.unbind();
+        }
     }
 
     @Override
@@ -526,5 +530,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void onEmptyClick(){
 
+    }
+
+    protected boolean isNeedButterKnife() {
+        return true;
     }
 }
