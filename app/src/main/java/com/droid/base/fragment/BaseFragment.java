@@ -1,5 +1,6 @@
 package com.droid.base.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -32,7 +33,7 @@ import static android.view.View.VISIBLE;
 /**
  * Created by wungko on 16/1/14.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements DialogInterface.OnDismissListener {
 
     /**
      * fragment 初始化
@@ -414,6 +415,7 @@ public abstract class BaseFragment extends Fragment {
             materialDialog = new MaterialDialog.Builder(getActivity())
                     .content(TextUtils.isEmpty(msg) ? "加载中" : msg)
                     .progress(true, 0)
+                    .dismissListener(this)
                     .autoDismiss(false).show();
         } else {
             materialDialog.setContent(TextUtils.isEmpty(msg) ? "加载中" : msg);
@@ -443,5 +445,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected void setIs1Request(boolean bool) {
         this.mIs1RequestData = bool;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+
     }
 }

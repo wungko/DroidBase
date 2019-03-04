@@ -1,6 +1,7 @@
 package com.droid.base.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ import static android.view.View.VISIBLE;
 /**
  * Created by wungko on 16/1/14.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
     /**
      * 页面跟布局
      **/
@@ -421,6 +422,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             materialDialog = new MaterialDialog.Builder(this)
                     .content(TextUtils.isEmpty(msg) ? "加载中" : msg)
                     .progress(true, 0)
+                    .dismissListener(this)
                     .autoDismiss(false).show();
         } else {
             materialDialog.setContent(TextUtils.isEmpty(msg) ? "加载中" : msg);
@@ -530,6 +532,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void onEmptyClick(){
+
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
 
     }
 }
